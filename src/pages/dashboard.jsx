@@ -1,6 +1,6 @@
 import React from "react";
-import HeaderBoard from "../../components/dashboard/HeaderBoard";
-import Statistics from "../../components/dashboard/Statistics";
+import HeaderBoard from "../components/dashboard/HeaderBoard";
+import Statistics from "../components/dashboard/Statistics";
 
 function dashboard() {
   return (

@@ -8,6 +8,7 @@ import faqSlice from "./reducers/faqSlice.js";
 import studentSlice from "./reducers/studentSlice.js";
 import feedbackSlice from "./reducers/feedbackSlice.js";
 import vacancySlice from "./reducers/vacancySlice.js";
+import userSlice from "./reducers/userSlice.js";
 
 const store = configureStore({
   reducer: {
@@ -20,6 +21,7 @@ const store = configureStore({
     faq: faqSlice,
     feedback: feedbackSlice,
     vacancy: vacancySlice,
+    user: userSlice, 
   },
 });
 
