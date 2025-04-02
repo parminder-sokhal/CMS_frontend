@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Gilda+Display&family=Inter+Tight:ital,wght@0,100..900;1,100..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+
+html,
+body {
+    .gilda-display-regular {
+        font-family: "Gilda Display", serif;
+        font-weight: 400;
+        font-style: normal;
+      }
+      
+}
+
+/* App.css */
+
+/* Set html and body to full height */
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+/* Ensure the layout is properly contained without overflow */
+.flex {
+  display: flex;
+}
+
+.h-screen {
+  height: 100vh; /* Ensure the layout takes full screen height */
+}
+
+/* Ensure overflow is handled properly */
+.overflow-hidden {
+  overflow: hidden; /* Prevent unwanted scrollbars */
+}
+
+/* Optional: If you need to remove vertical scrolling globally */
+body {
+  overflow-y: hidden; /* Disable vertical scrolling globally */
+}
