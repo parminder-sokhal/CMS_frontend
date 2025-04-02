@@ -22,7 +22,7 @@ function navbartop() {
         <Bell size={24} className="cursor-pointer" />
         <div className="flex items-center space-x-2 cursor-pointer">
           <img
-            src="/images/admin.jpg"
+            src="/images/admin.png"
             alt="User"
             className="w-8 h-8 rounded-full"
           />
@@ -34,7 +34,7 @@ function navbartop() {
         </div>
       </div>
     </header>
-    <hr/>
+    <hr className="border-gray-400"/>
 
     </>
   );

@@ -73,6 +73,14 @@ const Statistics = () => {
     ],
   };
 
+  const dataofprogress = [
+    {
+      progress: 20, // Progress in percentage (from 0 to 100)
+      color: "purple", // Main color of the filled section
+      backgroundColor: "skyblue", // Background color of the unfilled section
+    },
+  ];
+
   const options = {
     responsive: true,
     plugins: {
@@ -102,55 +110,73 @@ const Statistics = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto p-6">
-      <h1 className="text-3xl font-bold text-gray-900 mb-6">Statistics</h1>
-      <div className="bg-white rounded-lg shadow-sm p-6">
-        <div className="flex justify-between pb-4 mb-4 border-b border-gray-200 dark:border-gray-700">
-          <div className="flex items-center">
-            <div className="w-12 h-12 rounded-lg bg-gray-100 dark:bg-gray-700 flex items-center justify-center me-3">
-              <svg
-                className="w-6 h-6 text-gray-500 dark:text-gray-400"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                viewBox="0 0 20 19"
-              >
-                <path d="M14.5 0A3.987 3.987 0 0 0 11 2.1a4.977 4.977 0 0 1 3.9 5.858A3.989 3.989 0 0 0 14.5 0ZM9 13h2a4 4 0 0 1 4 4v2H5v-2a4 4 0 0 1 4-4Z" />
-                <path d="M5 19h10v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2ZM5 7a5.008 5.008 0 0 1 4-4.9 3.988 3.988 0 1 0-3.9 5.859A4.974 4.974 0 0 1 5 7Zm5 3a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm5-1h-.424a5.016 5.016 0 0 1-1.942 2.232A6.007 6.007 0 0 1 17 17h2a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5ZM5.424 9H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h2a6.007 6.007 0 0 1 4.366-5.768A5.016 5.016 0 0 1 5.424 9Z" />
-              </svg>
-            </div>
-            <div>
-              <h5 className="leading-none text-2xl font-bold text-gray-900 dark:text-white pb-1">3.4k</h5>
-              <p className="text-sm font-normal text-gray-500 dark:text-gray-400">
-                Leads generated per week
-              </p>
-            </div>
-          </div>
-          <div>
-            <span className="bg-green-100 text-green-800 text-xs font-medium inline-flex items-center px-2.5 py-1 rounded-md dark:bg-green-900 dark:text-green-300">
-              <svg
-                className="w-2.5 h-2.5 me-1.5"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 10 14"
-              >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M5 13V1m0 0L1 5m4-4 4 4"
-                />
-              </svg>
-              42.5%
-            </span>
+    <div className="flex justify-between mx-auto py-20 space-x-10">
+      {/* Statistics Section */}
+      <div className="w-2/3 border border-gray-400">
+        <h1 className="text-4xl font-bold text-gray-900 mb-6 px-5 py-3">Statistics</h1>
+        <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="grid grid-cols-1 gap-4">
+            {/* Chart component */}
+            <Line data={chartData} options={options} />
           </div>
         </div>
+      </div>
 
-        <div className="grid grid-cols-1 gap-4">
-          {/* Chart component */}
-          <Line data={chartData} options={options} />
+      {/* Progress Section */}
+      <div className="w-1/3 border border-gray-400 h-92">
+        <h1 className="text-2xl font-bold mb-10 px-5 py-2">Progress</h1>
+
+        <div className="flex flex-col items-center w-full ">
+          <div className="relative w-60 h-44">
+            <svg
+              className="w-full h-full rotate-180"
+              viewBox="0 0 36 36"
+            >
+              <circle
+                cx="18"
+                cy="16"
+                r="16"
+                fill="none"
+                stroke={dataofprogress[0].backgroundColor}
+                strokeWidth="8"
+                strokeDasharray="50 100"
+                strokeLinecap="round"
+              ></circle>
+
+              <circle
+                cx="18"
+                cy="16"
+                r="16"
+                fill="none"
+                stroke={dataofprogress[0].color}
+                strokeWidth="8"
+                strokeDasharray={`${dataofprogress[0].progress * 0.528} 100`} // 180-degree circle
+                strokeLinecap="round"
+              ></circle>
+            </svg>
+
+            <div className="absolute top-15 left-1/2 transform -translate-x-1/2 text-center">
+              <span className="text-2xl font-bold text-orange-600">{dataofprogress[0].progress}%</span>
+              <span className="text-xs text-orange-600 block">Progress</span>
+            </div>
+          </div>
+
+          <div className="flex w-full justify-around ">
+
+            <div className="w-1/2 text-center border-r">
+              <h3 className="text-lg font-semibold">Progress</h3>
+              <div className="text-xl text-purple-900">
+                {dataofprogress[0].progress}% Complete
+              </div>
+            </div>
+
+            <div className="w-1/2 text-center">
+              <h3 className="text-lg font-semibold">In Progress</h3>
+              <div className="text-xl text-sky-700">
+                {100 - dataofprogress[0].progress}% In Progress
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

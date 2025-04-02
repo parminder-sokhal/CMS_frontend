@@ -7,7 +7,7 @@ export default function Navbar() {
 
   return (
     <div>
-      <aside className="h-screen w-64 bg-white border-r">
+      <aside className="h-screen w-64 bg-white border-r border-gray-400">
         <nav className="h-full flex flex-col">
           <ul className="flex-1 px-3">
             <SidebarItem
@@ -22,7 +22,7 @@ export default function Navbar() {
               to="/addEmployee"
               active={location.pathname === "/addEmployee"}
             />
-            <hr className="my-3" />
+            <hr className="my-3 border-gray-400" />
           </ul>
         </nav>
       </aside>
