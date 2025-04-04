@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { Line } from "react-chartjs-2";
+import { CiLocationArrow1 } from "react-icons/ci";
+
+
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -75,7 +78,7 @@ const Statistics = () => {
 
   const dataofprogress = [
     {
-      progress: 20, // Progress in percentage (from 0 to 100)
+      progress: 80, // Progress in percentage (from 0 to 100)
       color: "purple", // Main color of the filled section
       backgroundColor: "skyblue", // Background color of the unfilled section
     },
@@ -112,8 +115,10 @@ const Statistics = () => {
   return (
     <div className="flex justify-between mx-auto py-20 space-x-10">
       {/* Statistics Section */}
-      <div className="w-2/3 border border-gray-400">
-        <h1 className="text-4xl font-bold text-gray-900 mb-6 px-5 py-3">Statistics</h1>
+      <div className="w-2/3 border border-gray-200">
+        <h1 className="text-4xl font-bold text-gray-900 mb-6 px-5 py-3">
+          Statistics
+        </h1>
         <div className="bg-white rounded-lg shadow-sm p-6">
           <div className="grid grid-cols-1 gap-4">
             {/* Chart component */}
@@ -123,15 +128,14 @@ const Statistics = () => {
       </div>
 
       {/* Progress Section */}
-      <div className="w-1/3 border border-gray-400 h-92">
-        <h1 className="text-2xl font-bold mb-10 px-5 py-2">Progress</h1>
+      <div className="w-1/3 border border-gray-200 h-96">
+        <h1 className="text-xl font-bold mb-10 px-5 py-4 border-b border-gray-200">
+          Progress
+        </h1>
 
         <div className="flex flex-col items-center w-full ">
-          <div className="relative w-60 h-44">
-            <svg
-              className="w-full h-full rotate-180"
-              viewBox="0 0 36 36"
-            >
+          <div className="relative w-60 h-50">
+            <svg className="w-full h-full rotate-180" viewBox="0 0 36 36">
               <circle
                 cx="18"
                 cy="16"
@@ -155,26 +159,45 @@ const Statistics = () => {
               ></circle>
             </svg>
 
-            <div className="absolute top-15 left-1/2 transform -translate-x-1/2 text-center">
-              <span className="text-2xl font-bold text-orange-600">{dataofprogress[0].progress}%</span>
-              <span className="text-xs text-orange-600 block">Progress</span>
+            <div className="absolute top-25 left-1/2 transform -translate-x-1/2 text-center ">
+              <div
+              className="rounded-full p-3 flex items-center justify-center"
+                style={{
+                  transform: `rotate(${(dataofprogress[0].progress / 100) * 180-140}deg)`,
+
+                  transition: "transform 0.3s ease", // Smooth transition for rotation
+                  backgroundColor: dataofprogress[0].color
+                }}
+              >
+                <CiLocationArrow1 
+                  size={25} // Adjust the size of the arrow
+                  className="text-white"
+                />
+              </div>
             </div>
           </div>
 
-          <div className="flex w-full justify-around ">
-
+          <div className="flex w-full justify-around">
             <div className="w-1/2 text-center border-r">
-              <h3 className="text-lg font-semibold">Progress</h3>
-              <div className="text-xl text-purple-900">
-                {dataofprogress[0].progress}% Complete
-              </div>
+              <h3 className="text-lg font-semibold flex items-center justify-center gap-2">
+                <span
+                  className="w-4 h-4 rounded-full"
+                  style={{ backgroundColor: dataofprogress[0].color }}
+                ></span>
+                Progress
+              </h3>
+              <div className="text-xl">{dataofprogress[0].progress}%</div>
             </div>
 
             <div className="w-1/2 text-center">
-              <h3 className="text-lg font-semibold">In Progress</h3>
-              <div className="text-xl text-sky-700">
-                {100 - dataofprogress[0].progress}% In Progress
-              </div>
+              <h3 className="text-lg font-semibold flex items-center justify-center gap-2">
+                <span
+                  className="w-4 h-4 rounded-full"
+                  style={{ backgroundColor: dataofprogress[0].backgroundColor }}
+                ></span>
+                In Progress
+              </h3>
+              <div className="text-xl">{100 - dataofprogress[0].progress}%</div>
             </div>
           </div>
         </div>

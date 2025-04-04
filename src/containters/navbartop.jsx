@@ -19,10 +19,10 @@ function navbartop() {
         <div className="text-lg font-bold text-blue-700">Techtimes.co.in</div>
       </div>
       <div className="flex items-center space-x-4">
-        <Bell size={24} className="cursor-pointer" />
+        <Bell size={24} className="cursor-pointer text-blue-700" />
         <div className="flex items-center space-x-2 cursor-pointer">
           <img
-            src="/images/admin.png"
+            src="/images/admin1.png"
             alt="User"
             className="w-8 h-8 rounded-full"
           />
