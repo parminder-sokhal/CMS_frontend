@@ -7,7 +7,7 @@ export default function Navbar() {
 
   return (
     <div>
-      <aside className="h-screen w-64 bg-white border-r  border-gray-400">
+      <aside className="h-screen w-54 bg-white border-r  border-gray-400">
         <nav className="h-full flex flex-col">
           <ul className="flex-1 px-3">
             <SidebarItem
