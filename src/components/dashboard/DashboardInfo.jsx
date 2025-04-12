@@ -17,7 +17,7 @@ const TABLE_HEAD = [
   "Message",
   "Make a Call",
   "Status",
-  "Action"
+  "Action",
 ];
 
 const sortKeyMap = {
@@ -186,10 +186,19 @@ function DashboardInfo() {
             />
             <MagnifyingGlassIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-500" />
           </div>
-          <div className="flex flex-col border border-gray-400 rounded-md h-10 w-25">
-            <div className="flex items-center py-1 justify-evenly ">
-              <CiCalendar size={30} className=" items-center text-gray-600" />
-              <p className="text-gray-500">Filter</p>
+          <div
+            className="flex flex-col border hover:bg-gray-100 border-gray-400 rounded-md py-2 h-10 px-4  cursor-pointer"
+            onClick={() => handleSort("Name/Ip")}
+          >
+            <div className="flex items-center gap-4 justify-center ">
+              <CiCalendar size={24} className="text-gray-600" />
+              <p className="text-gray-500">
+                {sortConfig.key === "name" && sortConfig.direction === "asc"
+                  ? "A - Z"
+                  : sortConfig.key === "name" && sortConfig.direction === "desc"
+                  ? "Z - A"
+                  : "A - Z"}
+              </p>
             </div>
           </div>
           <div className="flex flex-col border border-gray-400 rounded-md h-10 w-30 ">
@@ -214,7 +223,10 @@ function DashboardInfo() {
                     <th
                       key={head}
                       className={`p-3 text-left text-sm font-medium ${
-                        head !== "Message" && head !== "Make a Call" && head !== "Status" && head !== "Action"
+                        head !== "Message" &&
+                        head !== "Make a Call" &&
+                        head !== "Status" &&
+                        head !== "Action"
                           ? "cursor-pointer hover:bg-gray-200"
                           : "cursor-default"
                       }`}
@@ -224,9 +236,12 @@ function DashboardInfo() {
                     >
                       <div className="flex items-center gap-1">
                         {head}
-                        {head !== "Message" && head !== "Make a Call" && head !== "Status" && head !== "Action" && (
-                          <ChevronUpDownIcon className="h-4 w-4" />
-                        )}
+                        {head !== "Message" &&
+                          head !== "Make a Call" &&
+                          head !== "Status" &&
+                          head !== "Action" && (
+                            <ChevronUpDownIcon className="h-4 w-4" />
+                          )}
                       </div>
                     </th>
                   ))}
@@ -260,7 +275,9 @@ function DashboardInfo() {
                         {teacher.callTime}
                       </td>
                       <td className="p-3 text-center w-32 ">
-                        <span onClick={() => handleToggleLiveStatus(teacher._id)}>
+                        <span
+                          onClick={() => handleToggleLiveStatus(teacher._id)}
+                        >
                           {teacher.isLive ? (
                             <p className="text-white bg-purple-600 rounded-xl text-center px-2 py-1">
                               Replied
@@ -300,14 +317,14 @@ function DashboardInfo() {
           </span>
           <div className="flex gap-2">
             <button
-              className="px-4 py-2 border rounded-md bg-gray-200 text-sm"
+              className="px-4 py-2 border rounded-md hover:bg-gray-200 text-sm"
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
             >
               Previous
             </button>
             <button
-              className="px-4 py-2 border rounded-md bg-gray-200 text-sm"
+              className="px-4 py-2 border rounded-md hover:bg-gray-200 text-sm"
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={currentPage === totalPages}
             >

@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { GiProgression } from "react-icons/gi";
 import { FaArrowRight } from "react-icons/fa";
-import Datepicker from "./datepicker";
+// import Datepicker from "./datepicker";
+import Dateselected from "./dateselected";
 
 const data = {
   totalVisitors: 100,
@@ -22,7 +23,9 @@ const HeaderBoard = () => {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">Dashboard</h1>
         <div className="flex items-center space-x-2">
-          <Datepicker onChange={handleDateChange} />
+          {/* <Datepicker onChange={handleDateChange} /> */}
+          <Dateselected/>
+
         </div>
       </div>
 
