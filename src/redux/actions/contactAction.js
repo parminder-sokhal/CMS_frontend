@@ -1,115 +1,90 @@
 import axios from "axios";
-
-const server = import.meta.env.VITE_BACKEND_URL;
 import {
   contactRequest,
-  fetchContactsSuccess,
   contactFail,
-  addContact,
-  removeContact,
-  updateContact,
-  getContact,
-} from "../reducers/contactSlice";
+  createContactSuccess,
+  fetchContactsSuccess,
+  fetchLatestContactsSuccess,
+  updateStatusSuccess,
+  updateActivitySuccess,
+} from "../reducers/contactSlice.js";
 
-//get All Contacts
-export const getAllContactForms = () => async (dispatch) => {
+const server = import.meta.env.VITE_BACKEND_URL;
+
+export const createContact = (formData) => async (dispatch) => {
   try {
     dispatch(contactRequest());
 
-    const { data } = await axios.get(`${server}/getAllContactForms`);
+    const { data } = await axios.post(`${server}/contact/create`, formData);
+
+    dispatch(createContactSuccess(data));
+  } catch (error) {
+    dispatch(
+      contactFail(error.response?.data?.message || "Failed to create contact")
+    );
+  }
+};
+
+export const fetchContacts = () => async (dispatch) => {
+  try {
+    dispatch(contactRequest());
+
+    const { data } = await axios.get(`${server}/contact`);
+
     dispatch(fetchContactsSuccess(data));
   } catch (error) {
     dispatch(
-      contactFail(error.response?.data?.message || "Failed to fetch contact")
+      contactFail(error.response?.data?.message || "Failed to fetch contacts")
     );
   }
 };
 
-//get Contact by id
-export const getContactById = (id) => async (dispatch) => {
-  try {
-    dispatch(contactRequest());
-
-    const { data } = await axios.get(`${server}/getContactFromById/${id}`);
-
-    dispatch(getContact(data));
-  } catch (error) {
-    return async (dispatch) => {
-      dispatch(
-        contactFail(error.response?.data?.message || "Failed to fetch contact")
-      );
-    };
-  }
-};
-
-//create Contact
-export const createContact = (contactFrom) => async (dispatch) => {
-  try {
-    dispatch(contactRequest());
-
-    const { data } = await axios.post(
-      `${server}/createContactForm`,
-      contactFrom,
-      {
+export const fetchLatestContacts = () => async (dispatch) => {
+    try {
+      dispatch(contactRequest());
+  
+      const token = localStorage.getItem("Bearer"); // Fetch token
+      const { data } = await axios.get(`${server}/contact/latest`, {
         headers: {
-          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
         },
-        withCredentials: true,
-      }
-    );
-
-    dispatch(addContact(data));
-  } catch (error) {
-    return async (dispatch) => {
+      });
+  
+      dispatch(fetchLatestContactsSuccess(data));
+    } catch (error) {
       dispatch(
-        contactFail(error.response?.data?.message || "Failed to create contact")
+        contactFail(
+          error.response?.data?.message || "Failed to fetch latest contacts"
+        )
       );
-    };
-  }
-};
+    }
+  };
+  
 
-//update Contact
-export const updateContactById = (id, contactFrom) => async (dispatch) => {
+export const updateContactStatus = (id, statusData) => async (dispatch) => {
   try {
     dispatch(contactRequest());
 
-    const { data } = await axios.put(
-      `${server}/updateContactForm/${id}`,
-      contactFrom,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        withCredentials: true,
-      }
-    );
+    const { data } = await axios.put(`${server}/contact/status/${id}`, statusData);
 
-    dispatch(updateContact(data));
+    dispatch(updateStatusSuccess(data));
   } catch (error) {
-    return async (dispatch) => {
-      dispatch(
-        contactFail(error.response?.data?.message || "Failed to update contact")
-      );
-    };
+    dispatch(
+      contactFail(error.response?.data?.message || "Failed to update status")
+    );
   }
 };
 
-//delete Contact
-export const deleteContact = (id) => async (dispatch) => {
+export const updateContactActivity = (id, activityData) => async (dispatch) => {
   try {
     dispatch(contactRequest());
 
-    const { data } = await axios.delete(`${server}/deleteContactForm/${id}`, {
-      withCredentials: true,
-    });
+    const { data } = await axios.put(`${server}/contact/activity/${id}`, activityData);
 
-    dispatch(removeContact(id, data));
-    dispatch(getAllContactForms());
+    dispatch(updateActivitySuccess(data));
   } catch (error) {
-    return async (dispatch) => {
-      dispatch(
-        contactFail(error.response?.data?.message || "Failed to delete contact")
-      );
-    };
+    dispatch(
+      contactFail(error.response?.data?.message || "Failed to update activity")
+    );
   }
 };

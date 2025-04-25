@@ -7,7 +7,9 @@ import { CiCalendar } from "react-icons/ci";
 import { GiProgression } from "react-icons/gi";
 import { IoEyeOutline } from "react-icons/io5";
 import { IoIosArrowDown } from "react-icons/io";
-import ModalOpenTeacher from "../dashboard/ModalOpenTeacher.jsx";
+import ModalOpenDash from "../dashboard/ModalOpenDash.jsx";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchContacts } from "../../redux/actions/contactAction";
 
 const TABLE_HEAD = [
   "Name/Ip",
@@ -20,12 +22,16 @@ const TABLE_HEAD = [
   "Status",
   "Action",
 ];
+
+
 const sortKeyMap = {
   "Name/Ip": "name",
   Email: "email",
   "Phone No.": "phone",
   Status: "isLive",
 };
+
+
 function contacts() {
   const [tableRows, setTableRows] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -41,156 +47,34 @@ function contacts() {
 
   const rowsPerPage = 10;
 
-  useEffect(() => {
-    const dummyData = [
-      {
-        _id: "1",
-        name: "Amit Kumar",
-        ip: "IP123456",
-        email: "amitk@gmail.com",
-        phone: "95637-89264",
-        date: "2025-01-14",
-        nationality: "Indian",
-        message: "Do you offer services for.....",
-        callTime: "Jan 20, 2025 9:00 AM",
-        isLive: true,
-      },
-      {
-        _id: "2",
-        name: "Arjun Mehta",
-        ip: "IP2345678",
-        email: "arjun.mehta@gmail.com",
-        phone: "98765-43210",
-        date: "2025-01-10",
-        nationality: "Indian",
-        message: "Looking for IT consulting for.....",
-        callTime: "Jan 20, 2025 9:00 AM",
-        isLive: true,
-      },
-      {
-        _id: "3",
-        name: "Sofia Garcia",
-        ip: "IP3456789",
-        email: "amitk@gmail.com",
-        phone: "95637-89264",
-        date: "2025-01-14",
-        nationality: "Indian",
-        message: "Do you offer services for.....",
-        callTime: "N/A",
-        isLive: false,
-      },
-      {
-        _id: "4",
-        name: "Amit Kumar",
-        ip: "IP123456",
-        email: "amitk@gmail.com",
-        phone: "95637-89264",
-        date: "2025-01-14",
-        nationality: "Indian",
-        message: "Do you offer services for.....",
-        callTime: "Jan 20, 2025 9:00 AM",
-        isLive: true,
-      },
-      {
-        _id: "5",
-        name: "Arjun Mehta",
-        ip: "IP2345678",
-        email: "arjun.mehta@gmail.com",
-        phone: "98765-43210",
-        date: "2025-01-10",
-        nationality: "Indian",
-        message: "Looking for IT consulting for.....",
-        callTime: "Jan 20, 2025 9:00 AM",
-        isLive: true,
-      },
-      {
-        _id: "6",
-        name: "Sofia Garcia",
-        ip: "IP3456789",
-        email: "amitk@gmail.com",
-        phone: "95637-89264",
-        date: "2025-01-14",
-        nationality: "Indian",
-        message: "Do you offer services for.....",
-        callTime: "N/A",
-        isLive: false,
-      },
-      {
-        _id: "7",
-        name: "Amit Kumar",
-        ip: "IP123456",
-        email: "amitk@gmail.com",
-        phone: "95637-89264",
-        date: "2025-01-14",
-        nationality: "Indian",
-        message: "Do you offer services for.....",
-        callTime: "Jan 20, 2025 9:00 AM",
-        isLive: true,
-      },
-      {
-        _id: "8",
-        name: "Arjun Mehta",
-        ip: "IP2345678",
-        email: "arjun.mehta@gmail.com",
-        phone: "98765-43210",
-        date: "2025-01-10",
-        nationality: "Indian",
-        message: "Looking for IT consulting for.....",
-        callTime: "Jan 20, 2025 9:00 AM",
-        isLive: true,
-      },
-      {
-        _id: "9",
-        name: "Sofia Garcia",
-        ip: "IP3456789",
-        email: "amitk@gmail.com",
-        phone: "95637-89264",
-        date: "2025-01-14",
-        nationality: "Indian",
-        message: "Do you offer services for.....",
-        callTime: "N/A",
-        isLive: false,
-      },
-      {
-        _id: "10",
-        name: "Amit Kumar",
-        ip: "IP123456",
-        email: "amitk@gmail.com",
-        phone: "95637-89264",
-        date: "2025-01-14",
-        nationality: "Indian",
-        message: "Do you offer services for.....",
-        callTime: "Jan 20, 2025 9:00 AM",
-        isLive: true,
-      },
-      {
-        _id: "11",
-        name: "Arjun Mehta",
-        ip: "IP2345678",
-        email: "arjun.mehta@gmail.com",
-        phone: "98765-43210",
-        date: "2025-01-10",
-        nationality: "Indian",
-        message: "Looking for IT consulting for.....",
-        callTime: "Jan 20, 2025 9:00 AM",
-        isLive: true,
-      },
-      {
-        _id: "12",
-        name: "Sofia Garcia",
-        ip: "IP3456789",
-        email: "amitk@gmail.com",
-        phone: "95637-89264",
-        date: "2025-01-14",
-        nationality: "Indian",
-        message: "Do you offer services for.....",
-        callTime: "N/A",
-        isLive: false,
-      },
-    ];
+   const dispatch = useDispatch();
+   const { contacts, loading } = useSelector((state) => state.contact);
 
-    setTableRows(dummyData);
-  }, []);
+  useEffect(() => {
+     dispatch(fetchContacts());
+   }, [dispatch]);
+ 
+   useEffect(() => {
+    if (contacts?.length > 0) {
+      setTableRows(
+        contacts.map((contact) => ({
+          _id: contact.uuId,
+          name: contact.name,
+          ip: contact.uuId,
+          email: contact.email,
+          phone: contact.phone,
+          date: new Date(contact.createdAt).toLocaleDateString(),
+          nationality: contact.nationlity,
+          message: contact.chatData?.requester || "N/A",
+          callTime: contact.chatData?.createdAt
+            ? new Date(contact.chatData.createdAt).toLocaleString()
+            : "N/A",
+          isLive: contact.isActive,
+        }))
+      );
+    }
+  }, [contacts]);
+  
 
   const filteredRows = tableRows.filter((teacher) => {
     const searchTermLower = searchTerm.toLowerCase();
@@ -323,8 +207,10 @@ function contacts() {
       </div>
 
       <div className="w-full p-4 border border-gray-200 mb-25">
-        <div className="flex flex-col sm:flex-row justify-start gap-4 mb-4 ">
-          <div className="relative mt-4 sm:mt-0 sm:w-72">
+        {/* Filter Bar */}
+        <div className="flex flex-col md:flex-row justify-start items-start md:items-center gap-4 mb-4">
+          {/* Search Input */}
+          <div className="relative w-full md:w-1/3">
             <input
               type="text"
               placeholder="Search"
@@ -334,48 +220,45 @@ function contacts() {
             />
             <MagnifyingGlassIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-500" />
           </div>
+
+          {/* Sort Button */}
           <div
-            className="flex flex-col border hover:bg-gray-100 border-gray-400 rounded-md py-2 h-10 px-4  cursor-pointer"
+            className="flex items-center gap-2 border hover:bg-gray-100 border-gray-400 rounded-md px-4 py-2 cursor-pointer"
             onClick={() => handleSort("Name/Ip")}
           >
-            <div className="flex items-center gap-4 justify-center ">
-              <CiCalendar size={24} className="text-gray-600" />
-              <p className="text-gray-500">
-                {sortConfig.key === "name" && sortConfig.direction === "asc"
-                  ? "A - Z"
-                  : sortConfig.key === "name" && sortConfig.direction === "desc"
-                  ? "Z - A"
-                  : "A - Z"}
-              </p>
-            </div>
+            <CiCalendar size={24} className="text-gray-600" />
+            <p className="text-gray-500 text-sm">
+              {sortConfig.key === "name" && sortConfig.direction === "asc"
+                ? "A - Z"
+                : sortConfig.key === "name" && sortConfig.direction === "desc"
+                ? "Z - A"
+                : "A - Z"}
+            </p>
           </div>
-          <div className="flex flex-col border border-gray-400 rounded-md h-10 w-30 ">
-            <div className="flex items-center py-1 justify-around ">
-              <p className="text-gray-500">All Status</p>
-              <IoIosArrowDown
-                size={25}
-                className=" items-center text-gray-400 mt-1"
-              />
-            </div>
+
+          {/* Status Dropdown (placeholder) */}
+          <div className="flex items-center justify-between border border-gray-400 rounded-md px-3 py-2 w-full md:w-auto">
+            <p className="text-gray-500 text-sm">All Status</p>
+            <IoIosArrowDown className="text-gray-400 ml-2" size={20} />
           </div>
         </div>
 
+        {/* Responsive Table Container */}
         <div className="overflow-x-auto bg-white shadow rounded-lg">
           {tableRows.length === 0 ? (
             <div className="text-center p-4">No Data Found</div>
           ) : (
-            <table className="min-w-full table-auto">
+            <table className="min-w-[800px] md:min-w-full table-auto">
               <thead>
-                <tr className="bg-gray-100">
+                <tr className="bg-gray-100 text-sm">
                   {TABLE_HEAD.map((head) => (
                     <th
                       key={head}
-                      className={`p-3 text-left text-sm font-medium ${
-                        head !== "Subject" &&
-                        head !== "Charge Rate" &&
+                      className={`p-3 text-left font-medium whitespace-nowrap ${
+                        head !== "Message" &&
+                        head !== "Make a Call" &&
                         head !== "Status" &&
-                        head !== "Experience" &&
-                        head !== "Area"
+                        head !== "Action"
                           ? "cursor-pointer hover:bg-gray-200"
                           : "cursor-default"
                       }`}
@@ -385,11 +268,10 @@ function contacts() {
                     >
                       <div className="flex items-center gap-1">
                         {head}
-                        {head !== "Subject" &&
-                          head !== "Charge Rate" &&
+                        {head !== "Message" &&
+                          head !== "Make a Call" &&
                           head !== "Status" &&
-                          head !== "Experience" &&
-                          head !== "Area" && (
+                          head !== "Action" && (
                             <ChevronUpDownIcon className="h-4 w-4" />
                           )}
                       </div>
@@ -397,61 +279,52 @@ function contacts() {
                   ))}
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="text-sm">
                 {currentRows.length > 0 ? (
                   currentRows.map((teacher) => (
-                    <tr key={teacher._id}>
-                      <td className="text-sm py-2 pl-2 w-52 break-words">
+                    <tr key={teacher._id} className="hover:bg-gray-50">
+                      <td className="p-2 whitespace-nowrap w-52">
                         <strong>{teacher.name}</strong>
                         <br />
-                        {teacher.ip}
-                      </td>
-                      <td className="text-sm py-2 pl-2 w-40 break-words">
-                        {teacher.email}
-                      </td>
-                      <td className="text-sm py-2 pl-2 w-64 break-words">
-                        {teacher.phone}
-                      </td>
-                      <td className="text-sm py-2 pl-2 w-40 break-words">
-                        {teacher.date}
-                      </td>
-                      <td className="text-sm py-2 pl-2 w-40 break-words">
-                        {teacher.nationality}
-                      </td>
-                      <td className="text-sm py-2 pl-2 w-64">
-                        {teacher.message}
-                      </td>
-                      <td className="text-sm py-2 pl-2 w-32 break-words">
-                        {teacher.callTime}
-                      </td>
-                      <td className="p-3 text-center w-32 ">
-                        <span
-                          onClick={() => handleToggleLiveStatus(teacher._id)}
-                        >
-                          {teacher.isLive ? (
-                            <p className="text-white bg-purple-600 rounded-xl text-center px-2 py-1">
-                              Replied
-                            </p>
-                          ) : (
-                            <p className="text-white bg-orange-500 rounded-xl text-center px-2 py-1">
-                              Pending
-                            </p>
-                          )}
+                        <span className="text-xs text-gray-500">
+                          {teacher.ip}
                         </span>
                       </td>
-                      <td className="p-4">
+                      <td className="p-2 whitespace-nowrap">{teacher.email}</td>
+                      <td className="p-2 whitespace-nowrap">{teacher.phone}</td>
+                      <td className="p-2 whitespace-nowrap">{teacher.date}</td>
+                      <td className="p-2 whitespace-nowrap">
+                        {teacher.nationality}
+                      </td>
+                      <td className="p-2 whitespace-normal w-64">
+                        {teacher.message}
+                      </td>
+                      <td className="p-2 whitespace-nowrap">
+                        {teacher.callTime}
+                      </td>
+                      <td className="p-2 text-center">
+                        <span
+                          onClick={() => handleToggleLiveStatus(teacher._id)}
+                          className={`text-white px-2 py-1 rounded-xl text-xs font-medium cursor-pointer ${
+                            teacher.isLive ? "bg-purple-600" : "bg-orange-500"
+                          }`}
+                        >
+                          {teacher.isLive ? "Replied" : "Pending"}
+                        </span>
+                      </td>
+                      <td className="p-2 text-center">
                         <button
-                          className="flex items-center text-black hover:text-blue-500"
+                          className="text-black hover:text-blue-500"
                           onClick={() => handleOpenModal(teacher)}
                         >
-                          <IoEyeOutline size={25} />
+                          <IoEyeOutline size={20} />
                         </button>
                       </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="7" className="text-center py-4">
+                    <td colSpan="9" className="text-center py-4">
                       No teachers available
                     </td>
                   </tr>
@@ -461,20 +334,21 @@ function contacts() {
           )}
         </div>
 
-        <div className="flex items-center justify-between mt-4">
+        {/* Pagination */}
+        <div className="flex flex-col md:flex-row items-center justify-between mt-4 gap-2">
           <span className="text-sm">
             Page {currentPage} of {totalPages}
           </span>
           <div className="flex gap-2">
             <button
-              className="px-4 py-2 border rounded-md bg-gray-200 text-sm"
+              className="px-4 py-2 border rounded-md hover:bg-gray-200 text-sm"
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
             >
               Previous
             </button>
             <button
-              className="px-4 py-2 border rounded-md bg-gray-200 text-sm"
+              className="px-4 py-2 border rounded-md hover:bg-gray-200 text-sm"
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={currentPage === totalPages}
             >
@@ -483,7 +357,8 @@ function contacts() {
           </div>
         </div>
       </div>
-      <ModalOpenTeacher
+
+      <ModalOpenDash
         open={isModalOpen}
         handleClose={() => setIsModalOpen(false)}
         handleSave={handleSaveTeacher}
