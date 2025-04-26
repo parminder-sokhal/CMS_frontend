@@ -96,7 +96,7 @@ function EmployeeList() {
   };
 
   return (
-    <div className="w-full p-4 border border-gray-200 mb-6">
+    <div className="w-full p-5">
       {/* Search Bar */}
       <div className="relative mb-4 w-full md:w-1/4">
         <input
@@ -122,7 +122,7 @@ function EmployeeList() {
                 {TABLE_HEAD.map((head) => (
                   <th
                     key={head}
-                    className="p-3 text-left font-semibold whitespace-nowrap cursor-pointer hover:bg-gray-200"
+                    className="p-2 text-left font-semibold whitespace-nowrap cursor-pointer hover:bg-gray-200"
                     onClick={() =>
                       handleSort(head.toLowerCase().replace(/ /g, "").replace("/", ""))
                     }
@@ -138,19 +138,19 @@ function EmployeeList() {
             <tbody>
               {currentRows.map((row) => (
                 <tr key={row.id} className="hover:bg-gray-50">
-                  <td className="p-3 w-52">
+                  <td className="p-1 w-52">
                     <strong>{row.name}</strong>
                     <br />
                     <span className="text-xs text-gray-500">{row.email}</span>
                   </td>
-                  <td className="p-3 whitespace-nowrap">{row.phone}</td>
-                  <td className="p-3 whitespace-nowrap">{row.dob}</td>
-                  <td className="p-3 whitespace-nowrap">{row.role}</td>
-                  <td className="p-3 whitespace-nowrap">{row.company}</td>
-                  <td className="p-3 text-center">
+                  <td className="p-1 whitespace-nowrap">{row.phone}</td>
+                  <td className="p-1 whitespace-nowrap">{row.dob}</td>
+                  <td className="p-1 whitespace-nowrap">{row.role}</td>
+                  <td className="p-1 whitespace-nowrap">{row.company}</td>
+                  <td className="p-1 whitespace-nowrap">
                     <span
                       onClick={() => handleToggleStatus(row.id)}
-                      className={`text-white px-2 py-1 rounded-xl text-xs font-medium cursor-pointer ${
+                      className={`w-20 text-white px-5 py-1 justify-center flex rounded-xl text-xs font-medium cursor-pointer  ${
                         row.status === "Active" ? "bg-purple-600" : "bg-orange-500"
                       }`}
                     >

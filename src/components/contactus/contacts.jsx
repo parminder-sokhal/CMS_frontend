@@ -23,14 +23,12 @@ const TABLE_HEAD = [
   "Action",
 ];
 
-
 const sortKeyMap = {
   "Name/Ip": "name",
   Email: "email",
   "Phone No.": "phone",
   Status: "isLive",
 };
-
 
 function contacts() {
   const [tableRows, setTableRows] = useState([]);
@@ -47,14 +45,14 @@ function contacts() {
 
   const rowsPerPage = 10;
 
-   const dispatch = useDispatch();
-   const { contacts, loading } = useSelector((state) => state.contact);
+  const dispatch = useDispatch();
+  const { contacts, loading } = useSelector((state) => state.contact);
 
   useEffect(() => {
-     dispatch(fetchContacts());
-   }, [dispatch]);
- 
-   useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
+
+  useEffect(() => {
     if (contacts?.length > 0) {
       setTableRows(
         contacts.map((contact) => ({
@@ -74,7 +72,6 @@ function contacts() {
       );
     }
   }, [contacts]);
-  
 
   const filteredRows = tableRows.filter((teacher) => {
     const searchTermLower = searchTerm.toLowerCase();
@@ -176,31 +173,38 @@ function contacts() {
           <h1 className="text-4xl font-bold">Contact Us</h1>
         </div>
 
-        <div className="flex flex-rows justify-start gap-6">
-          <div className="px-3 py-4 h-full w-64 border rounded-md shadow-sm bg-[#FF931E] text-white">
+        <div className="flex lg:flex-row flex-col  gap-4">
+          {/* Respondents */}
+          <div className="flex flex-col px-4 py-4 min-w-72 border rounded-md shadow-sm bg-[#FF931E] text-white">
             <div className="flex items-center gap-2">
-              <p className="bg-white text-[#FF931E] rounded-3xl p-1">
+              <p className="bg-white text-[#FF931E] rounded-full p-1">
                 <GiProgression size={25} />
               </p>
-
-              <h3 className="text-2xl font-semibold">Respondents</h3>
+              <h3 className="text-lg md:text-xl font-semibold">Respondents</h3>
             </div>
-            <div className="flex flex-row pl-10 p-1 items-center justify-between">
-              <p className=" text-4xl font-bold ">{dataofHead.respondents}</p>
+            <div className="pl-10 p-1 flex items-center justify-between">
+              <p className="text-3xl md:text-4xl font-bold">
+                {dataofHead.respondents}
+              </p>
+              
             </div>
           </div>
 
-          <div className="px-3 py-4 h-fullw-72 border rounded-md shadow-sm bg-[#AC4EFF] text-white">
+          {/* Visitors We Reached */}
+          <div className=" flex flex-col px-4 py-4 min-w-72 border rounded-md shadow-sm bg-[#AC4EFF] text-white">
             <div className="flex items-center gap-2">
-              <p className="bg-white text-[#AC4EFF] rounded-3xl p-1">
+              <p className="bg-white text-[#AC4EFF] rounded-full p-1">
                 <GiProgression size={25} />
               </p>
-              <h3 className="text-2xl font-semibold">Visitors We Reached</h3>
+              <h3 className="text-lg md:text-xl font-semibold">
+                Visitors We Reached
+              </h3>
             </div>
-            <div className="flex flex-row pl-10 p-1 items-center justify-between">
-              <p className=" text-4xl font-bold ">
+            <div className="pl-10 p-1 flex items-center justify-between">
+              <p className="text-3xl md:text-4xl font-bold">
                 {dataofHead.visitorsWeReached}
               </p>
+              
             </div>
           </div>
         </div>
@@ -254,7 +258,7 @@ function contacts() {
                   {TABLE_HEAD.map((head) => (
                     <th
                       key={head}
-                      className={`p-3 text-left font-medium whitespace-nowrap ${
+                      className={`p-1 text-left font-medium whitespace-nowrap ${
                         head !== "Message" &&
                         head !== "Make a Call" &&
                         head !== "Status" &&
@@ -290,29 +294,29 @@ function contacts() {
                           {teacher.ip}
                         </span>
                       </td>
-                      <td className="p-2 whitespace-nowrap">{teacher.email}</td>
-                      <td className="p-2 whitespace-nowrap">{teacher.phone}</td>
-                      <td className="p-2 whitespace-nowrap">{teacher.date}</td>
-                      <td className="p-2 whitespace-nowrap">
+                      <td className="p-1 whitespace-nowrap">{teacher.email}</td>
+                      <td className="p-1 whitespace-nowrap">{teacher.phone}</td>
+                      <td className="p-1 whitespace-nowrap">{teacher.date}</td>
+                      <td className="p-1 whitespace-nowrap">
                         {teacher.nationality}
                       </td>
-                      <td className="p-2 whitespace-normal w-64">
+                      <td className="p-1 whitespace-normal max-w-50">
                         {teacher.message}
                       </td>
-                      <td className="p-2 whitespace-nowrap">
+                      <td className="p-1 whitespace-nowrap">
                         {teacher.callTime}
                       </td>
-                      <td className="p-2 text-center">
+                      <td className="p-1 whitespace-nowrap">
                         <span
                           onClick={() => handleToggleLiveStatus(teacher._id)}
-                          className={`text-white px-2 py-1 rounded-xl text-xs font-medium cursor-pointer ${
+                          className={`w-20 text-white px-5 py-1 justify-center flex rounded-xl text-xs font-medium cursor-pointer ${
                             teacher.isLive ? "bg-purple-600" : "bg-orange-500"
                           }`}
                         >
                           {teacher.isLive ? "Replied" : "Pending"}
                         </span>
                       </td>
-                      <td className="p-2 text-center">
+                      <td className="p-1 whitespace-nowrap">
                         <button
                           className="text-black hover:text-blue-500"
                           onClick={() => handleOpenModal(teacher)}

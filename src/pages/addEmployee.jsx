@@ -123,7 +123,7 @@ const AddEmployee = () => {
 
         <form
           onSubmit={handleSubmit}
-          className="grid grid-cols-1 lg:grid-cols-2 gap-6 bg-white p-6 shadow-sm rounded-lg justify-start"
+          className="grid grid-cols-1 lg:grid-cols-2 gap-6 bg-white p-6   justify-start"
         >
           {/* Text fields */}
           {[

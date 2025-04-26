@@ -209,7 +209,7 @@ function DashboardInfo() {
                   {TABLE_HEAD.map((head) => (
                     <th
                       key={head}
-                      className={`p-3 text-left font-medium whitespace-nowrap ${
+                      className={`p-2 text-left font-medium whitespace-nowrap ${
                         head !== "Message" &&
                         head !== "Make a Call" &&
                         head !== "Status" &&
@@ -238,37 +238,37 @@ function DashboardInfo() {
                 {currentRows.length > 0 ? (
                   currentRows.map((teacher) => (
                     <tr key={teacher._id} className="hover:bg-gray-50">
-                      <td className="p-2 whitespace-nowrap w-52">
+                      <td className="p-1 whitespace-nowrap w-52">
                         <strong>{teacher.name}</strong>
                         <br />
                         <span className="text-xs text-gray-500">
                           {teacher.ip}
                         </span>
                       </td>
-                      <td className="p-2 whitespace-nowrap">{teacher.email}</td>
-                      <td className="p-2 whitespace-nowrap">{teacher.phone}</td>
-                      <td className="p-2 whitespace-nowrap">{teacher.date}</td>
-                      <td className="p-2 whitespace-nowrap">
+                      <td className="p-1 whitespace-nowrap">{teacher.email}</td>
+                      <td className="p-1 whitespace-nowrap">{teacher.phone}</td>
+                      <td className="p-1 whitespace-nowrap">{teacher.date}</td>
+                      <td className="p-1 whitespace-nowrap">
                         {teacher.nationality}
                       </td>
-                      <td className="p-2 whitespace-normal w-64">
+                      <td className="p-1 whitespace-normal max-w-50">
                         {teacher.message}
                       </td>
-                      <td className="p-2 whitespace-nowrap">
+                      <td className="p-1 whitespace-nowrap max-w-50">
                         {teacher.callTime}
                       </td>
 
-                      <td className="py-2 flex text-center justify-center">
+                      <td className="py-1  whitespace-nowrap">
                         <span
                           onClick={() => handleToggleLiveStatus(teacher._id)}
-                          className={`text-white px-5 py-1 justify-center flex rounded-xl text-xs font-medium cursor-pointer ${
+                          className={`w-20 text-white px-5 py-1 justify-center flex rounded-xl text-xs font-medium cursor-pointer ${
                             teacher.isLive ? "bg-purple-600" : "bg-orange-500"
                           }`}
                         >
                           {teacher.isLive ? "Replied" : "Pending"}
                         </span>
                       </td>
-                      <td className="p-2 text-center">
+                      <td className="p-1  whitespace-nowrap">
                         <button
                           className="text-black hover:text-blue-500"
                           onClick={() => handleOpenModal(teacher)}
