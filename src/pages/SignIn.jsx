@@ -29,6 +29,7 @@ export default function SignIn() {
     const token = localStorage.getItem("Bearer");
     if (token || isAuthenticated) {
       navigate("/");
+
     }
   }, [isAuthenticated, navigate]);
 

@@ -5,7 +5,7 @@ import { logout } from "../redux/reducers/authSlice";
 import { useNavigate, useLocation } from "react-router-dom";
 
 function Navbartop() {
-  const [showDropdown, setShowDropdown] = useState(false);
+  const [showDropdown, setShowDropdown] = useState();
   const [tokenExists, setTokenExists] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -17,6 +17,11 @@ function Navbartop() {
     const token = localStorage.getItem("Bearer");
     setTokenExists(!!token);
   }, [location]);
+
+  useEffect(() => {
+    setShowDropdown(false);
+  }, [user]);
+  
 
   const handleLogout = () => {
     localStorage.removeItem("Bearer");
@@ -46,7 +51,7 @@ function Navbartop() {
         {/* Right side - User Info & Dropdown */}
         <div className="flex items-center mt-3 sm:mt-0 ">
           <div
-            className="relative flex items-center  cursor-pointer"
+            className="relative flex items-center gap-2 cursor-pointer"
             onClick={() => setShowDropdown(!showDropdown)}
           >
             <img
@@ -54,7 +59,7 @@ function Navbartop() {
               alt="User"
               className="w-8 h-8 rounded-full"
             />
-            <div className="flex flex-col pl-2 text-right text-xs sm:text-sm">
+            <div className="flex flex-col  text-right text-xs sm:text-sm">
               <span className="text-gray-700 font-semibold">
                 {user?.role?.name}
               </span>
