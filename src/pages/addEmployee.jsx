@@ -105,7 +105,7 @@ const AddEmployee = () => {
   }));
 
   return (
-    <div className="px-4 py-10 sm:px-8 md:px-16 lg:px-32">
+    <div className="px-4 py-10 sm:px-8 md:px-16 lg:px-32 h-screen overflow-y-auto">
       <div className="max-w-5xl mx-auto">
         <h2 className="text-2xl sm:text-3xl font-bold text-start mb-6">
           Create Employee
@@ -191,6 +191,7 @@ const AddEmployee = () => {
               onChange={handleSelectChange}
               isClearable
               placeholder="Select role..."
+              menuPortalTarget={document.body}
               styles={{
                 control: (base) => ({
                   ...base,
@@ -219,6 +220,7 @@ const AddEmployee = () => {
               onChange={handleSelectChange}
               isClearable
               placeholder="Select company..."
+              menuPortalTarget={document.body}
               styles={{
                 control: (base) => ({
                   ...base,

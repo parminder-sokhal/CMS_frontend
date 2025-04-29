@@ -25,7 +25,7 @@ function EmployeeList() {
   });
 
   const [currentPage, setCurrentPage] = useState(1);
-  const rowsPerPage = 5;
+  const rowsPerPage = 15;
 
   const dispatch = useDispatch();
   const { users, loading } = useSelector((state) => state.auth);

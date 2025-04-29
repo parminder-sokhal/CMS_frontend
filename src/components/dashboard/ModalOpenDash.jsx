@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
-import {
-  FaPhoneAlt,
-  FaEnvelope,
-  FaRegUser,
-} from "react-icons/fa";
+import { FaPhoneAlt, FaEnvelope, FaRegUser } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { replyToChat } from "../../redux/actions/chatAction.js";
+import { AiOutlineClose } from "react-icons/ai";
+import Select from "react-select";
 
 const ModalOpenDash = ({ open, handleClose, data }) => {
   const dispatch = useDispatch();
@@ -16,6 +14,21 @@ const ModalOpenDash = ({ open, handleClose, data }) => {
   const [email, setEmail] = useState("");
   const [replyMessage, setReplyMessage] = useState("");
   const [status, setStatus] = useState("");
+  const [showCallBox, setShowCallBox] = useState(false);
+  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedTime, setSelectedTime] = useState(null);
+
+  const timeOptions = [
+    { value: "09:00 AM", label: "09:00 AM" },
+    { value: "09:30 AM", label: "09:30 AM" },
+    { value: "10:00 AM", label: "10:00 AM" },
+    { value: "10:30 AM", label: "10:30 AM" },
+    { value: "11:00 AM", label: "11:00 AM" },
+    { value: "11:30 AM", label: "11:30 AM" },
+    { value: "12:00 PM", label: "12:00 PM" },
+    { value: "12:30 PM", label: "12:30 PM" },
+    // Add more as needed
+  ];
 
   useEffect(() => {
     if (open && data) {
@@ -23,7 +36,7 @@ const ModalOpenDash = ({ open, handleClose, data }) => {
       setIp(data?.ip || "");
       setPhone(data?.phone || "");
       setEmail(data?.email || "");
-      setReplyMessage(""); 
+      setReplyMessage("");
       setStatus(data?.status || "");
     }
   }, [open, data]);
@@ -52,8 +65,17 @@ const ModalOpenDash = ({ open, handleClose, data }) => {
           onClick={handleClickOutside}
         >
           <div className="modal-content bg-white sm:w-[90%] md:w-[70%] lg:w-[30%] h-full overflow-y-auto border-l border-gray-300 px-4 py-4 flex flex-col gap-3 shadow-xl">
-            <h2 className="text-lg sm:text-xl font-bold mt-2 mb-1">Personal Details</h2>
-
+            <div className="flex justify-between items-center">
+              <h2 className="text-lg sm:text-xl font-bold mt-2 mb-1">
+                Personal Details
+              </h2>
+              <button
+                onClick={handleClose}
+                className="text-gray-600 hover:text-black"
+              >
+                <AiOutlineClose size={20} />
+              </button>
+            </div>
             <div className="border border-gray-300 p-3 rounded-md">
               <div className="flex flex-col sm:flex-row justify-between items-center gap-3">
                 <div className="flex gap-3 items-center">
@@ -84,11 +106,15 @@ const ModalOpenDash = ({ open, handleClose, data }) => {
                 </div>
                 <div className="flex gap-2 items-center">
                   <FaRegUser className="text-gray-500" />
-                  <span className="text-gray-700">Nationality: {data?.nationality}</span>
+                  <span className="text-gray-700">
+                    Nationality: {data?.nationality}
+                  </span>
                 </div>
                 <div className="flex gap-2 items-center">
                   <FaRegUser className="text-gray-500" />
-                  <span className="text-gray-700">Status: {status || "Not found"}</span>
+                  <span className="text-gray-700">
+                    Status: {status || "Not found"}
+                  </span>
                 </div>
               </div>
             </div>
@@ -121,13 +147,74 @@ const ModalOpenDash = ({ open, handleClose, data }) => {
               </div>
             </div>
 
-            <div className="mt-auto">
+            <div className="relative w-full mt-auto">
+              {/* Overlay when showCallBox is true */}
+              {showCallBox && (
+                <div
+                  className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40"
+                  onClick={() => setShowCallBox(false)}
+                />
+              )}
+
               <button
-                className="bg-black text-white w-full py-2 rounded-md text-sm"
-                onClick={() => alert("Calling...")}
+                className="bg-black text-white w-full py-2 rounded-md text-sm relative z-50"
+                onClick={() => setShowCallBox(true)}
               >
                 Make a Call
               </button>
+
+              {showCallBox && (
+                <div className="absolute z-50 bottom-full mb-2 right-0 sm:left-0 sm:right-auto w-full sm:w-[280px] bg-white border border-gray-300 rounded-md shadow-md p-4">
+                  <div className="flex justify-between items-center mb-2">
+                    <h3 className="text-sm font-semibold">
+                      Schedule Your Appointment
+                    </h3>
+                    <button
+                      onClick={() => setShowCallBox(false)}
+                      className="text-gray-500 hover:text-black"
+                    >
+                      <AiOutlineClose size={16} />
+                    </button>
+                  </div>
+
+                  <div className="flex flex-col gap-3">
+                    <div>
+                      <label className="block text-xs mb-1 text-gray-600">
+                        Select Date
+                      </label>
+                      <input
+                        type="date"
+                        className="w-full border border-gray-300 rounded px-2 py-1 text-sm"
+                        value={selectedDate}
+                        onChange={(e) => setSelectedDate(e.target.value)}
+                        min={new Date().toISOString().split("T")[0]} // <-- sets today's date as minimum
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs mb-1 text-gray-600">
+                        Select Time Slot
+                      </label>
+                      <Select
+                        options={timeOptions}
+                        value={selectedTime}
+                        onChange={setSelectedTime}
+                        placeholder="Choose a time"
+                      />
+                    </div>
+                    <div className="text-right">
+                      <button
+                        className="text-sm bg-black text-white px-4 py-1 rounded hover:opacity-90"
+                        onClick={() => {
+                          console.log("Saved:", selectedDate, selectedTime);
+                          setShowCallBox(false);
+                        }}
+                      >
+                        Save
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

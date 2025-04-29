@@ -8,33 +8,28 @@ import contactSlice from "./reducers/contactSlice.js";
 import adminSlice from "./reducers/adminSlice.js";
 import chatSlice from "./reducers/chatSlice.js";
 
-// Combine your slices
 const rootReducer = combineReducers({
   teacher: teacherSlice,
-  auth: authSlice,        // <- the important one you want to persist
+  auth: authSlice,       
   contact: contactSlice,
   admin: adminSlice,
   chat: chatSlice,
 });
 
-// Persist configuration
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["auth"], // Only persist auth slice (you can add more if needed)
+  whitelist: ["auth"], 
 };
 
-// Create a persisted reducer
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-// Configure the store
 export const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
-      serializableCheck: false, // needed for redux-persist
+      serializableCheck: false, 
     }),
 });
 
-// Create the persistor
 export const persistor = persistStore(store);
