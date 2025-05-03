@@ -155,14 +155,19 @@ const ModalOpenDash = ({ open, handleClose, data }) => {
                   onClick={() => setShowCallBox(false)}
                 />
               )}
-
-              <button
-                className="bg-black text-white w-full py-2 rounded-md text-sm relative z-50"
-                onClick={() => setShowCallBox(true)}
-              >
-                Make a Call
-              </button>
-
+              <div className="flex justify-between items-center gap-2 mt-3">
+                <button
+                  className="bg-green-700 text-white w-1/2 py-2 rounded-md text-sm relative z-50"
+                >
+                  Mark as completed
+                </button>
+                <button
+                  className="bg-black text-white w-1/2 py-2 rounded-md text-sm relative z-50"
+                  onClick={() => setShowCallBox(true)}
+                >
+                  Make a Call
+                </button>
+              </div>
               {showCallBox && (
                 <div className="absolute z-50 bottom-full mb-2 right-0 sm:left-0 sm:right-auto w-full sm:w-[280px] bg-white border border-gray-300 rounded-md shadow-md p-4">
                   <div className="flex justify-between items-center mb-2">

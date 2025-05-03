@@ -67,6 +67,13 @@ export default function Navbar() {
               active={location.pathname === "/EmployeeList"}
               onClick={handleLinkClick}
             />
+            <SidebarItem
+              icon={<Package size={20} />}
+              text="Contact Us"
+              to="/contactus"
+              active={location.pathname === "/contactus"}
+              onClick={handleLinkClick}
+            />
             <hr className="border-gray-400" />
           </ul>
         </nav>
