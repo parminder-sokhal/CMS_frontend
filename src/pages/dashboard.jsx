@@ -7,7 +7,6 @@ function dashboard() {
   return (
     <div>
       <HeaderBoard />
-      <Statistics />
       <DashboardInfo/>
     </div>
   );

@@ -7,6 +7,7 @@ import authSlice from "./reducers/authSlice.js";
 import contactSlice from "./reducers/contactSlice.js";
 import adminSlice from "./reducers/adminSlice.js";
 import chatSlice from "./reducers/chatSlice.js";
+import StatisticsSlice from "./reducers/statisticsSlice.js";
 
 const rootReducer = combineReducers({
   teacher: teacherSlice,
@@ -14,6 +15,7 @@ const rootReducer = combineReducers({
   contact: contactSlice,
   admin: adminSlice,
   chat: chatSlice,
+  statistics: StatisticsSlice,
 });
 
 const persistConfig = {

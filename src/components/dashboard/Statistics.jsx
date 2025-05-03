@@ -1,30 +1,50 @@
-import React, { useState } from "react";
-import { Line } from "react-chartjs-2";
+import React, { useEffect } from "react";
 import { BarChart } from "@mui/x-charts/BarChart";
 import { CiLocationArrow1 } from "react-icons/ci";
+import { useDispatch, useSelector } from "react-redux";
+import { getWeekStats } from "../../redux/actions/StatisticsAction.js";
+import dayjs from "dayjs";
 
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
+const Statistics = ({ selectedDateRange }) => {
+  const dispatch = useDispatch();
+  const { weekStats } = useSelector((state) => state.statistics);
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
+  useEffect(() => {
+    dispatch(getWeekStats());
+  }, [dispatch]);
 
-const Statistics = () => {
+  const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+  // Filter stats by selected date range
+  const filteredStats = weekStats?.filter((stat) => {
+    if (!selectedDateRange?.start || !selectedDateRange?.end) return true;
+
+    const itemDate = dayjs(stat.date).startOf("day");
+    const start = dayjs(selectedDateRange.start).startOf("day");
+    const end = dayjs(selectedDateRange.end).startOf("day");
+
+    return itemDate.isAfter(start.subtract(1, "day")) && itemDate.isBefore(end.add(1, "day"));
+  }) || [];
+
+  // Build consistent array for each day of the week
+  const weeklyData = daysOfWeek.map((_, index) => {
+    const matched = filteredStats.find((entry) => {
+      const dayIndex = dayjs(entry.date).day();
+      return dayIndex === index;
+    });
+
+    return {
+      visitors: matched?.visitors || 0,
+      respondents: matched?.respondents || 0,
+      reached: matched?.reached || 0,
+    };
+  });
+
+  const visitorData = weeklyData.map((day) => day.visitors);
+  const respondentData = weeklyData.map((day) => day.respondents);
+  const reachedData = weeklyData.map((day) => day.reached);
+
+
   const dataofprogress = [
     {
       progress: 80,
@@ -37,30 +57,20 @@ const Statistics = () => {
     <div className="flex flex-col lg:flex-row justify-between mx-auto py-4 px-4 gap-6">
       {/* Statistics Section */}
       <div className="w-full lg:w-2/3 border border-gray-200">
-        <h1 className="text-3xl font-bold text-gray-900 mb-4 px-5 py-3">
-          Statistics
-        </h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-4 px-5 py-3">Statistics</h1>
         <div className="bg-white p-4 sm:p-6">
           <div className="grid grid-cols-1 gap-6">
             <BarChart
               series={[
-                { data: [635, 440, 840, 340, 350, 440, 940] },
-                { data: [510, 600, 490, 300, 910, 600, 409] },
-                { data: [915, 825, 900, 500, 550, 805, 300] },
+                { data: visitorData, label: "Visitors" },
+                { data: respondentData, label: "Respondents" },
+                { data: reachedData, label: "Reached" },
               ]}
               height={390}
               colors={["#6494FF", "#FF931E", "#AC4EFF"]}
               xAxis={[
                 {
-                  data: [
-                    "Monday",
-                    "Tuesday",
-                    "Wednesday",
-                    "Thrusday",
-                    "Friday",
-                    "Saturday",
-                    "Sunday",
-                  ],
+                  data: daysOfWeek,
                   scaleType: "band",
                 },
               ]}
@@ -89,7 +99,6 @@ const Statistics = () => {
                 strokeDasharray="50 100"
                 strokeLinecap="round"
               ></circle>
-
               <circle
                 cx="18"
                 cy="16"
@@ -101,7 +110,6 @@ const Statistics = () => {
                 strokeLinecap="round"
               ></circle>
             </svg>
-
             <div className="absolute top-25 left-1/2 transform -translate-x-1/2 text-center">
               <div
                 className="rounded-full p-3 flex items-center justify-center"
