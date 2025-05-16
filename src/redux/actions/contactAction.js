@@ -7,6 +7,7 @@ import {
   fetchLatestContactsSuccess,
   updateStatusSuccess,
   updateActivitySuccess,
+  updateCallDateSuccess,
 } from "../reducers/contactSlice.js";
 
 const server = import.meta.env.VITE_BACKEND_URL;
@@ -40,32 +41,35 @@ export const fetchContacts = () => async (dispatch) => {
 };
 
 export const fetchLatestContacts = () => async (dispatch) => {
-    try {
-      dispatch(contactRequest());
-  
-      const token = localStorage.getItem("Bearer"); // Fetch token
-      const { data } = await axios.get(`${server}/contact/latest`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-  
-      dispatch(fetchLatestContactsSuccess(data));
-    } catch (error) {
-      dispatch(
-        contactFail(
-          error.response?.data?.message || "Failed to fetch latest contacts"
-        )
-      );
-    }
-  };
-  
+  try {
+    dispatch(contactRequest());
+
+    const token = localStorage.getItem("Bearer");
+
+    const { data } = await axios.get(`${server}/contact/latest`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    dispatch(fetchLatestContactsSuccess(data));
+  } catch (error) {
+    dispatch(
+      contactFail(
+        error.response?.data?.message || "Failed to fetch latest contacts"
+      )
+    );
+  }
+};
 
 export const updateContactStatus = (id, statusData) => async (dispatch) => {
   try {
     dispatch(contactRequest());
 
-    const { data } = await axios.put(`${server}/contact/status/${id}`, statusData);
+    const { data } = await axios.put(
+      `${server}/contact/status/${id}`,
+      statusData
+    );
 
     dispatch(updateStatusSuccess(data));
   } catch (error) {
@@ -75,16 +79,38 @@ export const updateContactStatus = (id, statusData) => async (dispatch) => {
   }
 };
 
-export const updateContactActivity = (id, activityData) => async (dispatch) => {
+export const updateContactActivity = (id) => async (dispatch) => {
   try {
     dispatch(contactRequest());
 
-    const { data } = await axios.put(`${server}/contact/activity/${id}`, activityData);
+    const { data } = await axios.put(`${server}/contact/activity/${id}`);
 
     dispatch(updateActivitySuccess(data));
+    dispatch(fetchLatestContacts(data));
   } catch (error) {
     dispatch(
       contactFail(error.response?.data?.message || "Failed to update activity")
+    );
+  }
+};
+
+export const updateContactCallDate = (id, callData) => async (dispatch) => {
+  try {
+    dispatch(contactRequest());
+
+    const token = localStorage.getItem("Bearer");
+
+    const { data } = await axios.put(`${server}/contact/call/${id}`, callData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    dispatch(updateCallDateSuccess(data));
+    dispatch(fetchLatestContacts(data));
+  } catch (error) {
+    dispatch(
+      contactFail(error.response?.data?.message || "Failed to update call date")
     );
   }
 };

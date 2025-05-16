@@ -16,10 +16,15 @@ const HeaderBoard = () => {
 
   const [filteredStats, setFilteredStats] = useState([]);
 
+  // const [selectedDateRange, setSelectedDateRange] = useState({
+  //   start: dayjs().subtract(7, 'day').format("YYYY-MM-DD"),
+  //   end: dayjs().format("YYYY-MM-DD"),
+  // });
   const [selectedDateRange, setSelectedDateRange] = useState({
-    start: dayjs().subtract(7, 'day').format("YYYY-MM-DD"),
-    end: dayjs().format("YYYY-MM-DD"),
-  });
+  start: dayjs().startOf("month").format("YYYY-MM-DD"),
+  end: dayjs().endOf("month").format("YYYY-MM-DD"),
+});
+
   
   useEffect(() => {
     dispatch(getAllStats());
@@ -61,7 +66,7 @@ const HeaderBoard = () => {
         <StatCard title="Respondents" value={totalRespondents} color="#FF931E" />
         <StatCard title="Visitors We Reached" value={totalReached} color="#AC4EFF" />
       </div>
-      <Statistics selectedDateRange={selectedDateRange} />
+        <Statistics filteredStats={filteredStats} />
     </div>
   );
 };

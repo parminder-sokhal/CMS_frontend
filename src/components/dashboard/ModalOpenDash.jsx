@@ -2,10 +2,14 @@ import React, { useState, useEffect } from "react";
 import { FaPhoneAlt, FaEnvelope, FaRegUser } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { replyToChat } from "../../redux/actions/chatAction.js";
+import {
+  updateContactCallDate,
+  updateContactActivity,
+} from "../../redux/actions/contactAction.js";
 import { AiOutlineClose } from "react-icons/ai";
 import Select from "react-select";
 
-const ModalOpenDash = ({ open, handleClose, data }) => {
+const ModalOpenDash = ({ open, handleClose, data, refresh }) => {
   const dispatch = useDispatch();
 
   const [name, setName] = useState("");
@@ -47,14 +51,31 @@ const ModalOpenDash = ({ open, handleClose, data }) => {
     }
   };
 
-  const handleSendReply = () => {
+  const handleSendReply = async () => {
+    if (!replyMessage.trim()) return;
+
     const payload = {
-      request: replyMessage,
+      message: replyMessage,
       createdBy: 1,
     };
 
-    dispatch(replyToChat(ip, payload));
-    setReplyMessage("");
+    try {
+      await dispatch(replyToChat(data?.chatid, payload));
+      setReplyMessage("");
+
+      if (refresh) {
+        refresh(); // ✅ triggers fetchLatestContacts in parent
+      }
+    } catch (error) {
+      console.error("Failed to send reply", error);
+    }
+  };
+
+  const handleMarkAsCompleted = () => {
+    if (data?._id) {
+      dispatch(updateContactActivity(data._id));
+      handleClose();
+    }
   };
 
   return (
@@ -119,6 +140,7 @@ const ModalOpenDash = ({ open, handleClose, data }) => {
               </div>
             </div>
 
+            {/* Message Section */}
             <div className="border border-gray-300 px-3 py-2 rounded-md">
               <h2 className="text-base font-semibold mb-1">Message</h2>
               <p className="text-sm text-gray-700 mb-2 line-clamp-4">
@@ -126,6 +148,18 @@ const ModalOpenDash = ({ open, handleClose, data }) => {
               </p>
             </div>
 
+            {data?.replied?.length > 0 && (
+              <div className="border border-gray-300 px-3 py-2 rounded-md">
+                <h2 className="text-base font-semibold mb-1">Replied</h2>
+                <div className="space-y-1 text-sm text-gray-700">
+                  {data.replied.map((line, idx) => (
+                    <p key={idx}>• {line}</p>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Reply Input Section */}
             <div className="border border-gray-300 px-3 py-2 rounded-md space-y-2">
               <div>
                 <h3 className="text-base font-semibold mb-1">Reply</h3>
@@ -140,6 +174,7 @@ const ModalOpenDash = ({ open, handleClose, data }) => {
               <div className="text-right">
                 <button
                   className="text-sm border border-gray-300 px-4 py-1 rounded hover:bg-gray-100"
+                  disabled={!replyMessage.trim()}
                   onClick={handleSendReply}
                 >
                   Send
@@ -158,9 +193,11 @@ const ModalOpenDash = ({ open, handleClose, data }) => {
               <div className="flex justify-between items-center gap-2 mt-3">
                 <button
                   className="bg-green-700 text-white w-1/2 py-2 rounded-md text-sm relative z-50"
+                  onClick={handleMarkAsCompleted}
                 >
                   Mark as completed
                 </button>
+
                 <button
                   className="bg-black text-white w-1/2 py-2 rounded-md text-sm relative z-50"
                   onClick={() => setShowCallBox(true)}
@@ -192,26 +229,41 @@ const ModalOpenDash = ({ open, handleClose, data }) => {
                         className="w-full border border-gray-300 rounded px-2 py-1 text-sm"
                         value={selectedDate}
                         onChange={(e) => setSelectedDate(e.target.value)}
-                        min={new Date().toISOString().split("T")[0]} // <-- sets today's date as minimum
+                        min={new Date().toISOString().split("T")[0]}
                       />
                     </div>
-                    <div>
-                      <label className="block text-xs mb-1 text-gray-600">
-                        Select Time Slot
-                      </label>
-                      <Select
-                        options={timeOptions}
-                        value={selectedTime}
-                        onChange={setSelectedTime}
-                        placeholder="Choose a time"
-                      />
-                    </div>
+
+                    {/* Time Slot - Currently disabled */}
+                    {/* 
+      <div>
+        <label className="block text-xs mb-1 text-gray-600">Select Time Slot</label>
+        <Select
+          options={timeOptions}
+          value={selectedTime}
+          onChange={setSelectedTime}
+          placeholder="Choose a time"
+        />
+      </div>
+      */}
+
                     <div className="text-right">
                       <button
-                        className="text-sm bg-black text-white px-4 py-1 rounded hover:opacity-90"
+                        disabled={!selectedDate}
+                        className={`text-sm px-4 py-1 rounded ${
+                          selectedDate
+                            ? "bg-black text-white hover:opacity-90"
+                            : "bg-gray-300 text-gray-600 cursor-not-allowed"
+                        }`}
                         onClick={() => {
-                          console.log("Saved:", selectedDate, selectedTime);
+                          if (selectedDate && data?._id) {
+                            dispatch(
+                              updateContactCallDate(data._id, {
+                                date: selectedDate,
+                              })
+                            );
+                          }
                           setShowCallBox(false);
+                          handleClose();
                         }}
                       >
                         Save

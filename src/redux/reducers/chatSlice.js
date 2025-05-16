@@ -24,15 +24,16 @@ const chatSlice = createSlice({
     replyChatSuccess(state, action) {
       state.loading = false;
       const updatedChat = action.payload.data;
-      state.chats = state.chats.map(chat =>
-        chat.id === updatedChat.id ? updatedChat : chat
+
+      state.chats = state.chats.map((chat) =>
+        chat.chatData?.uuId === updatedChat.chatData?.uuId ? updatedChat : chat
       );
       state.message = action.payload.message;
     },
     changeChatActivitySuccess(state, action) {
       state.loading = false;
       const updatedChat = action.payload.data;
-      state.chats = state.chats.map(chat =>
+      state.chats = state.chats.map((chat) =>
         chat.id === updatedChat.id ? updatedChat : chat
       );
       state.message = action.payload.message;

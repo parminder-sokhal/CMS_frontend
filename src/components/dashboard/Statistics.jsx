@@ -2,43 +2,28 @@ import React, { useEffect } from "react";
 import { BarChart } from "@mui/x-charts/BarChart";
 import { CiLocationArrow1 } from "react-icons/ci";
 import { useDispatch, useSelector } from "react-redux";
-import { getWeekStats } from "../../redux/actions/StatisticsAction.js";
+import { getAllStats } from "../../redux/actions/StatisticsAction.js";
 import dayjs from "dayjs";
 
-const Statistics = ({ selectedDateRange }) => {
+const Statistics = ({ filteredStats }) => {
   const dispatch = useDispatch();
   const { weekStats } = useSelector((state) => state.statistics);
 
-  useEffect(() => {
-    dispatch(getWeekStats());
-  }, [dispatch]);
 
   const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-
-  // Filter stats by selected date range
-  const filteredStats = weekStats?.filter((stat) => {
-    if (!selectedDateRange?.start || !selectedDateRange?.end) return true;
-
-    const itemDate = dayjs(stat.date).startOf("day");
-    const start = dayjs(selectedDateRange.start).startOf("day");
-    const end = dayjs(selectedDateRange.end).startOf("day");
-
-    return itemDate.isAfter(start.subtract(1, "day")) && itemDate.isBefore(end.add(1, "day"));
-  }) || [];
-
-  // Build consistent array for each day of the week
-  const weeklyData = daysOfWeek.map((_, index) => {
-    const matched = filteredStats.find((entry) => {
-      const dayIndex = dayjs(entry.date).day();
-      return dayIndex === index;
-    });
-
-    return {
-      visitors: matched?.visitors || 0,
-      respondents: matched?.respondents || 0,
-      reached: matched?.reached || 0,
-    };
+const weeklyData = daysOfWeek.map((_, index) => {
+  const matched = filteredStats.find((entry) => {
+    const dayIndex = dayjs(entry.date).day();
+    return dayIndex === index;
   });
+
+  return {
+    visitors: matched?.visitors || 0,
+    respondents: matched?.respondents || 0,
+    reached: matched?.reached || 0,
+  };
+});
+
 
   const visitorData = weeklyData.map((day) => day.visitors);
   const respondentData = weeklyData.map((day) => day.respondents);

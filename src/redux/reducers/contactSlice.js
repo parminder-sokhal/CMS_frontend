@@ -44,6 +44,10 @@ const contactSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    updateCallDateSuccess(state, action) {
+      state.loading = false;
+      state.message = action.payload.message;
+    },
   },
 });
 
@@ -54,6 +58,7 @@ export const {
   fetchLatestContactsSuccess,
   updateStatusSuccess,
   updateActivitySuccess,
+  updateCallDateSuccess,
   contactFail,
 } = contactSlice.actions;
 

@@ -61,10 +61,10 @@ function DashboardInfo() {
           phone: contact.phone,
           date: new Date(contact.createdAt).toLocaleDateString(),
           nationality: contact.nationlity,
+          chatid: contact.chatData?.uuId,
           message: contact.chatData?.requester || "N/A",
-          callTime: contact.chatData?.createdAt
-            ? new Date(contact.chatData.createdAt).toLocaleString()
-            : "N/A",
+          replied: contact.chatData?.sender || [],
+          callTime: new Date(contact.makeACall).toLocaleDateString(),
           isLive: contact.isActive,
         }))
       );
@@ -159,6 +159,11 @@ function DashboardInfo() {
   const handleSaveTeacher = () => {
     setIsModalOpen(false);
   };
+  const handleReloadAfterReply = () => {
+    dispatch(fetchLatestContacts());
+    dispatch(fetchContacts());
+  };
+
   return (
     <>
       <div className="w-full p-4 border border-gray-200 mb-25">
@@ -320,6 +325,7 @@ function DashboardInfo() {
         handleSave={handleSaveTeacher}
         data={data}
         isEditing={!!editingId}
+        refresh={handleReloadAfterReply} 
       />
     </>
   );
